@@ -1,31 +1,36 @@
-import requests,os
+import requests, os
 from .utils import set_header
+
 
 class Request(object):
 
     def __init__(self):
-        self.folder='mm131/'
-        
-    def save(self,pic,i,j):
-        if not os.path.exists(self.folder+i):
-            os.makedirs(self.folder+i)
-        with open(self.folder+'%s/%s.jpg'% (i,j),'wb') as pp:
+        self.folder = 'picture/'
+
+    def save(self, pic, i):
+        if not os.path.exists(self.folder):
+            os.makedirs(self.folder)
+        with open(self.folder + '%s.jpg' % i, 'wb') as pp:
             pp.write(pic)
         return 'saved!'
 
-    def get(self,url,i,j):
-        response = requests.get(url,headers=set_header(url))
-        pic=response.content
-        if response.status_code==404:
+    def get(self, url, i):
+        # conn = aiohttp.TCPConnector(verify_ssl=False)  # 防止ssl报错
+        proxies = {'http': 'http://127.0.0.1:8001', 'https': 'http://127.0.0.1:8001'}
+        response = requests.get(url, headers=set_header(url), proxies=proxies)
+        pic = response.content
+        if response.status_code == 404:
             return '404 not found!'
-        elif response.status_code==200:
-            return self.save(pic,i,j)
+        elif response.status_code == 200:
+            return self.save(pic, i)
 
-    def requrl(self,ij):
-        i=ij[:4]
-        j=ij[4:]
-        url = 'http://img1.mm131.me/pic/'+i+'/'+j+'.jpg'
+    def requestUrl(self, url):
+        url = url.replace("\n", "")
         print('正在请求-->', url)
-        result = self.get(url,i,j)
-        print('获取到结果:-->', url, '-->', result)
-
+        arr = url.split("/")
+        if isinstance(arr, list):
+            i = arr[len(arr) - 1]
+            result = self.get(url, i)
+            print('获取到结果:-->', url, '-->', result)
+        else:
+            print('未获取到结果')
