@@ -19,7 +19,7 @@ class Aio_mm(object):
             os.makedirs(self.mm_folder)
         url = url.replace("\n", "")
         print('Waiting for', url)
-        async with aiohttp.request('GET', url, connector=conn, proxy="http://127.0.0.1:8001") as resp:
+        async with aiohttp.request('GET', url, proxy="http://127.0.0.1:8001") as resp:
             if resp.status != 200:
                 return ''
             pic = await resp.read()
@@ -40,6 +40,8 @@ class Aio_mm(object):
     async def makeurl(self, sta, end, limit):
         with open('./url.txt', 'r') as file:
             urls = file.readlines()
+            length = len(urls)
+            print("txt中数组长度为"+str(length))
         # urls = ['http://img1.mm131.me/pic/' + str(i) + '/' + str(j) + '.jpg' for i in range(sta, end + 1) for j in
         #         range(1, limit)]
             urls = urls[sta-1:end-1]

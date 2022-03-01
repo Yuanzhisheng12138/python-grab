@@ -33,6 +33,8 @@ class Thread_mm(object):
     def go_start(self, begin, end, wokers=100, **kw):
         with open('./url.txt', 'r') as file:
             urls = file.readlines()
+            length = len(urls)
+            print("txt中数组长度为" + str(length))
         urls = urls[sta-1:end-1]
         self.req_obj = Request()
         with futures.ThreadPoolExecutor(wokers) as e:
