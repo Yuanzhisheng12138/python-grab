@@ -30,11 +30,15 @@ class Thread_mm(object):
     #     result = self.get(url,i,j)
     #     print('Get res from', url, 'Result:', result)
 
-    def go_start(self, begin, end, wokers=100, **kw):
+    def go_start(self, sta, end, wokers=100, **kw):
         with open('./url.txt', 'r') as file:
             urls = file.readlines()
             length = len(urls)
-            print("txt中数组长度为" + str(length))
+            print("url-txt中数组长度为" + str(length))
+        with open('./name.txt', 'r') as file2:
+            names = file2.readlines()
+            length2 = len(names)
+            print("name-txt中数组长度为" + str(length2))
         urls = urls[sta-1:end-1]
         self.req_obj = Request()
         with futures.ThreadPoolExecutor(wokers) as e:

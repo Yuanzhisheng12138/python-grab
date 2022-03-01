@@ -5,12 +5,25 @@ from .utils import set_header
 class Request(object):
 
     def __init__(self):
+        self.url_name_dict = {}
         self.folder = 'picture/'
+        with open('./url.txt', 'r') as file:
+            urls = file.readlines()
+        with open('./name.txt', 'r') as file2:
+            names = file2.readlines()
+        for index in range(len(urls)):
+            url = urls[index]
+            url = url.replace("\n", "")
+            arr = url.split("/")
+            if isinstance(arr, list):
+                i = arr[len(arr) - 1]
+                self.url_name_dict[i] = names[index]
 
     def save(self, pic, i):
         if not os.path.exists(self.folder):
             os.makedirs(self.folder)
-        with open(self.folder + '%s.jpg' % i, 'wb') as pp:
+        # with open(self.folder + '%s.jpg' % i, 'wb') as pp:
+        with open(self.folder + self.url_name_dict[i] + '.jpg', 'wb') as pp:
             pp.write(pic)
         return 'saved!'
 
